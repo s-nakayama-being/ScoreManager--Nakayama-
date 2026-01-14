@@ -1,6 +1,6 @@
 ﻿namespace ScoreManager {
     /// <summary>
-    /// データを保持するクラス。名前、科目、点数のデータを保持。
+    /// 生徒の名前、科目、点数のデータを保持するクラス
     /// </summary>
     public class StudentScore {
         /// <summary>

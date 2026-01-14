@@ -1,6 +1,6 @@
 ﻿namespace ScoreManager {
     /// <summary>
-    /// データを処理するクラス。CSV読み込み、表示、集計、出力などを担当。
+    /// 成績リストの読み込み、集計、表示、出力を行うマネージャクラス。
     /// </summary>
     public class ScoreManager {
 
