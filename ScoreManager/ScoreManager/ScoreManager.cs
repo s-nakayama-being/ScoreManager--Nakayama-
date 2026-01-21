@@ -15,6 +15,13 @@ namespace ScoreManager {
         private List<StudentScore> FStudents = new List<StudentScore>();
 
         /// <summary>
+        /// 正規表現パターン：名前、科目、点数
+        /// </summary>
+        private const string C_ScoreRegexPattern = @"^\s*(?<name>[a-zA-Z\p{IsHiragana}\p{IsKatakana}\p{IsCJKUnifiedIdeographs}ー々]+)\s*," +
+                                           @"\s*(?<subject>[\p{IsHiragana}\p{IsKatakana}\p{IsCJKUnifiedIdeographs}]+)\s*," +
+                                           @"\s*(?<score>100|[1-9][0-9]?|0)\s*$";
+
+        /// <summary>
         /// CSVファイルの読み込み
         /// </summary>
         /// <param name="vFilePath">CSVファイルのパス</param>
@@ -26,17 +33,13 @@ namespace ScoreManager {
 
             string[] wLines = File.ReadAllLines(vFilePath, Encoding.UTF8);
 
-            const string C_ScoreRegexPattern = @"^\s*(?<name>[a-zA-Z\p{IsHiragana}\p{IsKatakana}\p{IsCJKUnifiedIdeographs}ー々]+)\s*," +
-                  @"\s*(?<subject>[\p{IsHiragana}\p{IsKatakana}\p{IsCJKUnifiedIdeographs}]+)\s*," +
-                  @"\s*(?<score>100|[1-9][0-9]?|0)\s*$";
-
             foreach (string wLine in wLines) {
                 if (string.IsNullOrEmpty(wLine) || wLine.StartsWith("#")) {
                     continue;
                 }
 
-                bool wIsPattenMatch = Regex.IsMatch(wLine, C_ScoreRegexPattern);
-                if (!wIsPattenMatch) {
+                bool wIsPatternMatch = Regex.IsMatch(wLine, C_ScoreRegexPattern);
+                if (!wIsPatternMatch) {
                     Console.WriteLine($"不正な行: {wLine}");
                     continue;
                 }
