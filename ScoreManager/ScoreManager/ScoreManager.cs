@@ -15,48 +15,53 @@ namespace ScoreManager {
         private List<StudentScore> FStudents = new List<StudentScore>();
 
         /// <summary>
-        /// 今回読み取るCSVファイル（成績データ）のパス
-        /// </summary>
-        private const string C_FilePath = "scores.csv";
-
-        /// <summary>
         /// CSVファイルの読み込み
         /// </summary>
-        public void ReadCsv() {
-            if (!File.Exists(C_FilePath)) {
-                Console.WriteLine(C_FilePath + "が見つかりません：");
+        /// <param name="vFilePath">CSVファイルのパス</param>
+        public void ReadCsv(string vFilePath) {
+            if (!File.Exists(vFilePath)) {
+                Console.WriteLine(vFilePath + "が見つかりません：");
                 return;
             }
 
-            string[] wLines = File.ReadAllLines(C_FilePath, Encoding.UTF8);
+            string[] wLines = File.ReadAllLines(vFilePath, Encoding.UTF8);
 
-            string wPattern = @"^\s*(?<name>[a-zA-Z\p{IsHiragana}\p{IsKatakana}\p{IsCJKUnifiedIdeographs}]+)\s*,"+
-                              @"\s*(?<subject>[\p{IsHiragana}\p{IsKatakana}\p{IsCJKUnifiedIdeographs}]+)\s*,"+
-                              @"\s*(?<score>100|[1-9][0-9]?|0)\s*$";
+            const string C_ScoreRegexPattern = @"^\s*(?<name>[a-zA-Z\p{IsHiragana}\p{IsKatakana}\p{IsCJKUnifiedIdeographs}ー々]+)\s*," +
+                  @"\s*(?<subject>[\p{IsHiragana}\p{IsKatakana}\p{IsCJKUnifiedIdeographs}]+)\s*," +
+                  @"\s*(?<score>100|[1-9][0-9]?|0)\s*$";
 
             foreach (string wLine in wLines) {
-                if (String.IsNullOrEmpty(wLine) || wLine.StartsWith("#")) {
+                if (string.IsNullOrEmpty(wLine) || wLine.StartsWith("#")) {
                     continue;
                 }
 
-                bool wPattenMatch = Regex.IsMatch(wLine, wPattern);
-                if (!wPattenMatch) {
+                bool wIsPattenMatch = Regex.IsMatch(wLine, C_ScoreRegexPattern);
+                if (!wIsPattenMatch) {
                     Console.WriteLine($"不正な行: {wLine}");
                     continue;
                 }
 
-                string[] wItems = wLine.Split(',');
+                StudentScore wNewStudent = CreateStudentFromLine(wLine);
 
-                string wName = wItems[0].Trim();
-                string wSubject = wItems[1].Trim();
-                int wScore = int.Parse(wItems[2].Trim());
-
-                StudentScore wNewStudents = new StudentScore(wName, wSubject, wScore);
-
-                this.FStudents.Add(wNewStudents);
+                this.FStudents.Add(wNewStudent);
             }
 
             Console.WriteLine($"{this.FStudents.Count} 件のデータを読み込みました。");
+        }
+
+        /// <summary>
+        /// CSVの1行を分解してStudentScoreオブジェクトを生成する
+        /// </summary>
+        /// <param name="vLine">カンマ区切りの文字列</param>
+        /// <returns>作成されたStudentScoreオブジェクト</returns>
+        public StudentScore CreateStudentFromLine (string vLine) {
+            string[] wItems = vLine.Split(',');
+
+            string wName = wItems[0].Trim();
+            string wSubject = wItems[1].Trim();
+            var wScore = int.Parse(wItems[2].Trim());
+
+            return new StudentScore(wName, wSubject, wScore);
         }
     }
 }
