@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 
@@ -57,7 +58,7 @@ namespace ScoreManager {
         /// </summary>
         /// <param name="vLine">カンマ区切りの文字列</param>
         /// <returns>作成されたStudentScoreオブジェクト</returns>
-        public StudentScore CreateStudentFromLine (string vLine) {
+        public StudentScore CreateStudentFromLine(string vLine) {
             string[] wItems = vLine.Split(',');
 
             string wName = wItems[0].Trim();
@@ -65,6 +66,18 @@ namespace ScoreManager {
             var wScore = int.Parse(wItems[2].Trim());
 
             return new StudentScore(wName, wSubject, wScore);
+        }
+
+        /// <summary>
+        /// 全教科の平均点を計算する
+        /// </summary>
+        /// <returns>平均点（データがない場合は0）</returns>
+        public double CalculateAllSubjectsAverage() {
+            if (this.FStudents.Count == 0) {
+                return 0;
+            }
+
+            return this.FStudents.Average(student => student.Score);
         }
     }
 }

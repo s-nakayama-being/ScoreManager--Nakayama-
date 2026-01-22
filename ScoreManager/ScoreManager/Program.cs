@@ -1,4 +1,6 @@
-﻿namespace ScoreManager {
+﻿using System;
+
+namespace ScoreManager {
     public class Program {
 
         /// <summary>
@@ -8,7 +10,11 @@
         static void Main(string[] args) {
             var wManager = new ScoreManager();
 
-            wManager.ReadCsv(C_FilePath);             
+            wManager.ReadCsv(C_FilePath);
+
+            double wAverageScore = wManager.CalculateAllSubjectsAverage();
+
+            Console.WriteLine("平均点: {0:F2}", wAverageScore);
         }
     }
 }
