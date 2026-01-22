@@ -22,7 +22,7 @@ namespace ScoreManager {
                                            @"\s*(?<score>100|[1-9][0-9]?|0)\s*$";
 
         /// <summary>
-        /// CSVファイルの読み込み
+        /// CSVファイルを読み込む
         /// </summary>
         /// <param name="vFilePath">CSVファイルのパス</param>
         public void ReadCsv(string vFilePath) {
@@ -65,6 +65,17 @@ namespace ScoreManager {
             var wScore = int.Parse(wItems[2].Trim());
 
             return new StudentScore(wName, wSubject, wScore);
+        }
+
+        /// <summary>
+        /// 成績一覧を表示する
+        /// </summary>
+        public void DisplayScores() {
+            Console.WriteLine("=== 成績一覧 ===");
+
+            foreach (var wStudent in this.FStudents) {
+                Console.WriteLine("{0, -3} | {1, -2} | {2, 2}", wStudent.Name, wStudent.Subject, wStudent.Score);
+            }
         }
     }
 }
