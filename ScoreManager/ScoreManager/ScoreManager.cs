@@ -22,12 +22,12 @@ namespace ScoreManager {
                                            @"\s*(?<score>100|[1-9][0-9]?|0)\s*$";
 
         /// <summary>
-        /// CSVファイルの読み込み
+        /// CSVファイルを読み込み、成績リストに格納する
         /// </summary>
         /// <param name="vFilePath">CSVファイルのパス</param>
-        public void ReadCsv(string vFilePath) {
+        public void LoadCsv(string vFilePath) {
             if (!File.Exists(vFilePath)) {
-                Console.WriteLine(vFilePath + "が見つかりません：");
+                Console.WriteLine(vFilePath + "が見つかりません");
                 return;
             }
 
@@ -38,33 +38,31 @@ namespace ScoreManager {
                     continue;
                 }
 
-                bool wIsPatternMatch = Regex.IsMatch(wLine, C_ScoreRegexPattern);
-                if (!wIsPatternMatch) {
+                Match wMatch = Regex.Match(wLine, C_ScoreRegexPattern);
+                if (!wMatch.Success) {
                     Console.WriteLine($"不正な行: {wLine}");
                     continue;
                 }
 
-                StudentScore wNewStudent = CreateStudentFromLine(wLine);
+                string wName = wMatch.Groups["name"].Value;
+                string wSubject = wMatch.Groups["subject"].Value;
+                int wScore = int.Parse(wMatch.Groups["score"].Value);
 
-                this.FStudents.Add(wNewStudent);
+                this.FStudents.Add(new StudentScore(wName, wSubject, wScore));
             }
 
             Console.WriteLine($"{this.FStudents.Count} 件のデータを読み込みました。");
         }
 
         /// <summary>
-        /// CSVの1行を分解してStudentScoreオブジェクトを生成する
+        /// 成績一覧を表示する
         /// </summary>
-        /// <param name="vLine">カンマ区切りの文字列</param>
-        /// <returns>作成されたStudentScoreオブジェクト</returns>
-        public StudentScore CreateStudentFromLine (string vLine) {
-            string[] wItems = vLine.Split(',');
+        public void DisplayScores() {
+            Console.WriteLine("=== 成績一覧 ===");
 
-            string wName = wItems[0].Trim();
-            string wSubject = wItems[1].Trim();
-            var wScore = int.Parse(wItems[2].Trim());
-
-            return new StudentScore(wName, wSubject, wScore);
+            foreach (var wStudent in this.FStudents) {
+                Console.WriteLine("{0, -3} | {1, -2} | {2, 2}", wStudent.Name, wStudent.Subject, wStudent.Score);
+            }
         }
     }
 }
