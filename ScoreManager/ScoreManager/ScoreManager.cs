@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 
@@ -63,6 +64,14 @@ namespace ScoreManager {
             foreach (var wStudent in this.FStudents) {
                 Console.WriteLine("{0, -3} | {1, -2} | {2, 2}", wStudent.Name, wStudent.Subject, wStudent.Score);
             }
+        }
+
+        /// <summary>
+        /// 合格者（点数が60点以上の生徒）を抽出する
+        /// </summary>
+        /// <returns>合格者リスト</returns>
+        public List<StudentScore> GetPassingStudents() {
+            return this.FStudents.Where(student => student.Score >= 60).ToList();
         }
     }
 }
