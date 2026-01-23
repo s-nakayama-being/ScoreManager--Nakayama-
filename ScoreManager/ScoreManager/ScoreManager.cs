@@ -24,7 +24,7 @@ namespace ScoreManager {
         /// <summary>
         /// CSVファイルを読み込み、成績リストに格納する
         /// </summary>
-        /// <param name="vFileePath">CSVファイルのパス</param>
+        /// <param name="vFilePath">CSVファイルのパス</param>
         public void LoadCsv(string vFilePath) {
             if (!File.Exists(vFilePath)) {
                 Console.WriteLine(vFilePath + "が見つかりません");
