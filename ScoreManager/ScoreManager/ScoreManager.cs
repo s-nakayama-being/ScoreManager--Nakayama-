@@ -71,9 +71,7 @@ namespace ScoreManager {
         /// </summary>
         /// <returns>平均点（データがない場合は0）</returns>
         public double CalculateAllSubjectsAverage() {
-            if (this.FStudents.Count == 0) {
-                return 0;
-            }
+            if (this.FStudents.Count == 0) return 0;
 
             return this.FStudents.Average(student => student.Score);
         }

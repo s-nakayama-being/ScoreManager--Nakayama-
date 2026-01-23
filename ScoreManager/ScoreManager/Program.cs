@@ -15,7 +15,6 @@ namespace ScoreManager {
             wManager.DisplayScores();
 
             double wAverageScore = wManager.CalculateAllSubjectsAverage();
-
             Console.WriteLine("平均点: {0:F2}", wAverageScore);
         }
     }
