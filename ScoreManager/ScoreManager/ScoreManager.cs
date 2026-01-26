@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 
@@ -63,6 +64,23 @@ namespace ScoreManager {
             foreach (var wStudent in this.FStudents) {
                 Console.WriteLine("{0, -3} | {1, -2} | {2, 2}", wStudent.Name, wStudent.Subject, wStudent.Score);
             }
+        }
+
+        /// <summary>
+        /// 各教科の平均点を計算する
+        /// </summary>
+        /// <returns>教科名をキー、平均点を値とする辞書</returns>
+        public Dictionary<string, double> CalculateEachSubjectAverage() {
+            if (this.FStudents.Count == 0) return new Dictionary<string, double>();
+
+            return this.FStudents
+                .GroupBy(student => student.Subject)
+                .ToDictionary(
+                    group => group.Key,
+                    group => group.Average(student => student.Score)
+                );
+
+
         }
     }
 }
