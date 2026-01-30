@@ -13,7 +13,7 @@ namespace ScoreManager {
         /// <summary>
         /// 成績データを保持するリスト
         /// </summary>
-        private List<StudentScore> FStudents = new List<StudentScore>();
+        private List<StudentScore> FStudentScores = new List<StudentScore>();
 
         /// <summary>
         /// 正規表現パターン：名前、科目、点数
@@ -21,6 +21,11 @@ namespace ScoreManager {
         private const string C_ScoreRegexPattern = @"^\s*(?<name>[a-zA-Z\p{IsHiragana}\p{IsKatakana}\p{IsCJKUnifiedIdeographs}ー々]+)\s*," +
                                            @"\s*(?<subject>[\p{IsHiragana}\p{IsKatakana}\p{IsCJKUnifiedIdeographs}]+)\s*," +
                                            @"\s*(?<score>100|[1-9][0-9]?|0)\s*$";
+
+        /// <summary>
+        /// 表示科目の教科リスト
+        /// </summary>
+        private static readonly string[] FTargetSubjects = { "数学", "国語", "理科", "英語", "社会" };
 
         /// <summary>
         /// CSVファイルを読み込み、成績リストに格納する
@@ -49,10 +54,10 @@ namespace ScoreManager {
                 string wSubject = wMatch.Groups["subject"].Value;
                 int wScore = int.Parse(wMatch.Groups["score"].Value);
 
-                this.FStudents.Add(new StudentScore(wName, wSubject, wScore));
+                this.FStudentScores.Add(new StudentScore(wName, wSubject, wScore));
             }
 
-            Console.WriteLine($"{this.FStudents.Count} 件のデータを読み込みました。");
+            Console.WriteLine($"{this.FStudentScores.Count} 件のデータを読み込みました。");
         }
 
         /// <summary>
@@ -61,7 +66,7 @@ namespace ScoreManager {
         public void DisplayScores() {
             Console.WriteLine("=== 成績一覧 ===");
 
-            foreach (var wStudent in this.FStudents) {
+            foreach (var wStudent in this.FStudentScores) {
                 Console.WriteLine("{0, -3} | {1, -2} | {2, 2}", wStudent.Name, wStudent.Subject, wStudent.Score);
             }
         }
@@ -70,17 +75,27 @@ namespace ScoreManager {
         /// 各教科の平均点を計算する
         /// </summary>
         /// <returns>教科名をキー、平均点を値とする辞書</returns>
-        public Dictionary<string, double> CalculateEachSubjectAverage() {
-            if (this.FStudents.Count == 0) return new Dictionary<string, double>();
+        private Dictionary<string, double> CalculateEachSubjectAverage() {
+            if (this.FStudentScores.Count == 0) return new Dictionary<string, double>();
 
-            return this.FStudents
-                .GroupBy(student => student.Subject)
-                .ToDictionary(
-                    group => group.Key,
-                    group => group.Average(student => student.Score)
-                );
+            return this.FStudentScores.GroupBy(x => x.Subject).ToDictionary(y => y.Key, y => y.Average(z => z.Score));
+        }
 
+        /// <summary>
+        /// 各教科の平均点を表示する
+        /// </summary>
+        public void DisplayEachSubjectAverage() {
+            var wSubjectAverage = this.CalculateEachSubjectAverage();
 
+            Console.WriteLine("科目別平均点:");
+
+            foreach (string wSubject in FTargetSubjects) {
+                if (wSubjectAverage.TryGetValue(wSubject, out double wAverage)) {
+                    Console.WriteLine("{0}: {1:F2}", wSubject, wAverage);
+                } else {
+                    Console.WriteLine("{0}: 0", wSubject);
+                }
+            }
         }
     }
 }
