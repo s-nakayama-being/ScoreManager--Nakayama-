@@ -23,6 +23,11 @@ namespace ScoreManager {
                                            @"\s*(?<score>100|[1-9][0-9]?|0)\s*$";
 
         /// <summary>
+        /// 合格点の基準値
+        /// </summary>
+        private const int C_PassingScore = 60;
+
+        /// <summary>
         /// CSVファイルを読み込み、成績リストに格納する
         /// </summary>
         /// <param name="vFilePath">CSVファイルのパス</param>
@@ -62,16 +67,35 @@ namespace ScoreManager {
             Console.WriteLine("=== 成績一覧 ===");
 
             foreach (var wStudent in this.FStudents) {
-                Console.WriteLine("{0, -3} | {1, -2} | {2, 2}", wStudent.Name, wStudent.Subject, wStudent.Score);
+                this.PrintStudent(wStudent);
             }
         }
 
         /// <summary>
-        /// 合格者（点数が60点以上の生徒）を抽出する
+        /// 生徒一人分の情報をフォーマットして出力するヘルパーメソッド
+        /// </summary>
+        /// <param name="vStudent">生徒データ</param>
+        private void PrintStudent(StudentScore vStudent) {
+            Console.WriteLine("{0, -3} | {1, -2} | {2, 2}", vStudent.Name, vStudent.Subject, vStudent.Score);
+        }
+
+        /// <summary>
+        /// 合格者を抽出する
         /// </summary>
         /// <returns>合格者リスト</returns>
-        public List<StudentScore> GetPassingStudents() {
-            return this.FStudents.Where(student => student.Score >= 60).ToList();
+        private List<StudentScore> GetPassingStudents() {
+            return this.FStudents.Where(x => x.Score >= C_PassingScore).ToList();
+        }
+
+        /// <summary>
+        /// 合格者一覧を表示する
+        /// </summary>
+        public void DisplayPassingStudents() {
+            var wPassingStudents = this.GetPassingStudents();
+            Console.WriteLine($"合格者 {wPassingStudents.Count} 名");
+            foreach (var wStudent in wPassingStudents) {
+                this.PrintStudent(wStudent);
+            }
         }
     }
 }
