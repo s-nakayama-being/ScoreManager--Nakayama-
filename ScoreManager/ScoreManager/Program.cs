@@ -13,6 +13,8 @@
 
             wManager.DisplayScores();
 
+            wManager.DisplayAllSubjectsAverage();
+
             wManager.DisplayEachSubjectAverage();
         }
     }

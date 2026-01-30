@@ -71,6 +71,23 @@ namespace ScoreManager {
             }
         }
 
+        /// 全教科の平均点を計算する
+        /// </summary>
+        /// <returns>平均点（データがない場合は0）</returns>
+        private double CalculateAllSubjectsAverage() {
+            if (this.FStudentScores.Count == 0) return 0;
+
+            return this.FStudentScores.Average(x => x.Score);
+        }
+
+        /// <summary>
+        /// 全教科の平均点を表示する
+        /// </summary>
+        public void DisplayAllSubjectsAverage() {
+            double wAverageScore = this.CalculateAllSubjectsAverage();
+            Console.WriteLine("平均点: {0:F2}", wAverageScore);
+        }
+
         /// <summary>
         /// 各教科の平均点を計算する
         /// </summary>
