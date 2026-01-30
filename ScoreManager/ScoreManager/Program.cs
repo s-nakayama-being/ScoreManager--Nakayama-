@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace ScoreManager {
+﻿namespace ScoreManager {
     public class Program {
 
         /// <summary>
@@ -14,8 +12,7 @@ namespace ScoreManager {
 
             wManager.DisplayScores();
 
-            double wAverageScore = wManager.CalculateAllSubjectsAverage();
-            Console.WriteLine("平均点: {0:F2}", wAverageScore);
+            wManager.DisplayAllSubjectsAverage();
         }
     }
 }

@@ -13,7 +13,7 @@ namespace ScoreManager {
         /// <summary>
         /// 成績データを保持するリスト
         /// </summary>
-        private List<StudentScore> FStudents = new List<StudentScore>();
+        private List<StudentScore> FStudentScores = new List<StudentScore>();
 
         /// <summary>
         /// 正規表現パターン：名前、科目、点数
@@ -49,10 +49,10 @@ namespace ScoreManager {
                 string wSubject = wMatch.Groups["subject"].Value;
                 int wScore = int.Parse(wMatch.Groups["score"].Value);
 
-                this.FStudents.Add(new StudentScore(wName, wSubject, wScore));
+                this.FStudentScores.Add(new StudentScore(wName, wSubject, wScore));
             }
 
-            Console.WriteLine($"{this.FStudents.Count} 件のデータを読み込みました。");
+            Console.WriteLine($"{this.FStudentScores.Count} 件のデータを読み込みました。");
         }
 
         /// <summary>
@@ -61,7 +61,7 @@ namespace ScoreManager {
         public void DisplayScores() {
             Console.WriteLine("=== 成績一覧 ===");
 
-            foreach (var wStudent in this.FStudents) {
+            foreach (var wStudent in this.FStudentScores) {
                 Console.WriteLine("{0, -3} | {1, -2} | {2, 2}", wStudent.Name, wStudent.Subject, wStudent.Score);
             }
         }
@@ -70,10 +70,18 @@ namespace ScoreManager {
         /// 全教科の平均点を計算する
         /// </summary>
         /// <returns>平均点（データがない場合は0）</returns>
-        public double CalculateAllSubjectsAverage() {
-            if (this.FStudents.Count == 0) return 0;
+        private double CalculateAllSubjectsAverage() {
+            if (this.FStudentScores.Count == 0) return 0;
 
-            return this.FStudents.Average(student => student.Score);
+            return this.FStudentScores.Average(x => x.Score);
+        }
+
+        /// <summary>
+        /// 全教科の平均点を表示する
+        /// </summary>
+        public void DisplayAllSubjectsAverage() {
+            double wAverageScore = this.CalculateAllSubjectsAverage();
+            Console.WriteLine("平均点: {0:F2}", wAverageScore);
         }
     }
 }
