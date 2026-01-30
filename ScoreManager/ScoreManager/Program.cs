@@ -16,6 +16,8 @@
             wManager.DisplayAllSubjectsAverage();
 
             wManager.DisplayEachSubjectAverage();
+
+            wManager.DisplayPassingStudents();
         }
     }
 }

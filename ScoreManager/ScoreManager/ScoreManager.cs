@@ -23,6 +23,10 @@ namespace ScoreManager {
                                            @"\s*(?<score>100|[1-9][0-9]?|0)\s*$";
 
         /// <summary>
+        /// 合格点の基準値
+        /// </summary>
+        private const int C_PassingScore = 60;
+
         /// 表示科目の教科リスト
         /// </summary>
         private static readonly string[] FTargetSubjects = { "数学", "国語", "理科", "英語", "社会" };
@@ -67,8 +71,16 @@ namespace ScoreManager {
             Console.WriteLine("=== 成績一覧 ===");
 
             foreach (var wStudent in this.FStudentScores) {
-                Console.WriteLine("{0, -3} | {1, -2} | {2, 2}", wStudent.Name, wStudent.Subject, wStudent.Score);
+                this.PrintStudent(wStudent);
             }
+        }
+
+        /// <summary>
+        /// 生徒一人分の情報をフォーマットして出力するヘルパーメソッド
+        /// </summary>
+        /// <param name="vStudent">生徒データ</param>
+        private void PrintStudent(StudentScore vStudent) {
+            Console.WriteLine("{0, -3} | {1, -2} | {2, 2}", vStudent.Name, vStudent.Subject, vStudent.Score);
         }
 
         /// 全教科の平均点を計算する
@@ -112,6 +124,25 @@ namespace ScoreManager {
                 } else {
                     Console.WriteLine("{0}: 0", wSubject);
                 }
+            }
+        }
+
+        /// <summary>
+        /// 合格者を抽出する
+        /// </summary>
+        /// <returns>合格者リスト</returns>
+        private List<StudentScore> GetPassingStudents() {
+            return this.FStudentScores.Where(x => x.Score >= C_PassingScore).ToList();
+        }
+
+        /// <summary>
+        /// 合格者一覧を表示する
+        /// </summary>
+        public void DisplayPassingStudents() {
+            var wPassingStudents = this.GetPassingStudents();
+            Console.WriteLine($"合格者 {wPassingStudents.Count} 名");
+            foreach (var wStudent in wPassingStudents) {
+                this.PrintStudent(wStudent);
             }
         }
     }
