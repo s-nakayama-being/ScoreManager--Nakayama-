@@ -11,6 +11,8 @@
             wManager.LoadCsv(C_FilePath);
 
             wManager.DisplayScores();
+
+            wManager.DisplayAllSubjectsAverage();
         }
     }
 }
