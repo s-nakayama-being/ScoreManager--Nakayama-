@@ -34,14 +34,14 @@ namespace ScoreManager {
         /// <summary>
         /// CSVファイルを読み込み、成績リストに格納する
         /// </summary>
-        /// <param name="vFilePath">CSVファイルのパス</param>
-        public void LoadCsv(string vFilePath) {
-            if (!File.Exists(vFilePath)) {
-                Console.WriteLine(vFilePath + "が見つかりません");
+        /// <param name="vInputCsvFilePath">CSVファイルのパス</param>
+        public void LoadCsv(string vInputCsvFilePath) {
+            if (!File.Exists(vInputCsvFilePath)) {
+                Console.WriteLine(vInputCsvFilePath + "が見つかりません");
                 return;
             }
 
-            string[] wLines = File.ReadAllLines(vFilePath, Encoding.UTF8);
+            string[] wLines = File.ReadAllLines(vInputCsvFilePath, Encoding.UTF8);
 
             foreach (string wLine in wLines) {
                 if (string.IsNullOrEmpty(wLine) || wLine.StartsWith("#")) {
@@ -143,6 +143,27 @@ namespace ScoreManager {
             Console.WriteLine($"合格者 {wPassingStudents.Count} 名");
             foreach (var wStudent in wPassingStudents) {
                 this.PrintStudent(wStudent);
+            }
+        }
+
+        /// <summary>
+        /// 成績リストに格納している全データをCSV形式で出力する
+        /// </summary> 
+        /// <param name="vOutputCsvFilePath">出力先CSVファイルのパス</param>
+        public void ExportScoresToCsv(string vOutputCsvFilePath) {
+            try {
+                using (var wWriter = new StreamWriter(vOutputCsvFilePath, false, Encoding.UTF8)) {
+                    wWriter.WriteLine("name,Subject,Score");
+
+                    foreach (var wStudent in this.FStudentScores) {
+                        wWriter.WriteLine($"{wStudent.Name},{wStudent.Subject},{wStudent.Score}");
+                    }
+                }
+
+                Console.WriteLine($"CSV出力完了：{Path.GetFileName(vOutputCsvFilePath)}");
+
+            } catch (Exception wEx) {
+                Console.WriteLine($"CSV出力エラー: {wEx.Message}");
             }
         }
     }
