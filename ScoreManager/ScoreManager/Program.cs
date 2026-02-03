@@ -22,7 +22,7 @@ namespace ScoreManager {
             wManager.DisplayPassingStudents();
 
             Console.Write("科目名を入力：");
-            string wInputSubject = Console.ReadLine();
+            var wInputSubject = Console.ReadLine();
             wManager.DisplayScoresPerSubject(wInputSubject);
         }
     }

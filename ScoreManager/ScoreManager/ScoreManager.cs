@@ -27,6 +27,7 @@ namespace ScoreManager {
         /// </summary>
         private const int C_PassingScore = 60;
 
+        /// <summary>
         /// 表示科目の教科リスト
         /// </summary>
         private static readonly string[] FTargetSubjects = { "数学", "国語", "理科", "英語", "社会" };
@@ -83,6 +84,7 @@ namespace ScoreManager {
             Console.WriteLine("{0, -3} | {1, -2} | {2, 2}", vStudent.Name, vStudent.Subject, vStudent.Score);
         }
 
+        /// <summary>
         /// 全教科の平均点を計算する
         /// </summary>
         /// <returns>平均点（データがない場合は0）</returns>
@@ -150,7 +152,7 @@ namespace ScoreManager {
         /// 科目ごとに成績データを抽出する
         /// </summary>
         /// <param name="vSubject">入力された科目名</param> 
-        private List<StudentScore> GetScorePerSubject(string vSubject) {
+        private List<StudentScore> GetScoresPerSubject(string vSubject) {
             return this.FStudentScores.Where(x => x.Subject.Equals(vSubject, StringComparison.OrdinalIgnoreCase)).ToList();
         }
 
@@ -166,7 +168,7 @@ namespace ScoreManager {
 
             Console.WriteLine($"{vSubject} の成績一覧");
 
-            var wFilteredStudentsBySubject = this.GetScorePerSubject(vSubject);
+            var wFilteredStudentsBySubject = this.GetScoresPerSubject(vSubject);
 
             if (!wFilteredStudentsBySubject.Any()) {
                 Console.WriteLine($"エラー：{vSubject} の成績データが見つかりません。");
