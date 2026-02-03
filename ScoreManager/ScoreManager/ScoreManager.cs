@@ -16,20 +16,21 @@ namespace ScoreManager {
         private List<StudentScore> FStudentScores = new List<StudentScore>();
 
         /// <summary>
+        /// 表示科目の教科リスト
+        /// </summary>
+        private static readonly string[] FTargetSubjects = { "数学", "国語", "理科", "英語", "社会" };
+
+        /// <summary>
         /// 正規表現パターン：名前、科目、点数
         /// </summary>
         private const string C_ScoreRegexPattern = @"^\s*(?<name>[a-zA-Z\p{IsHiragana}\p{IsKatakana}\p{IsCJKUnifiedIdeographs}ー々]+)\s*," +
-                                           @"\s*(?<subject>[\p{IsHiragana}\p{IsKatakana}\p{IsCJKUnifiedIdeographs}]+)\s*," +
-                                           @"\s*(?<score>100|[1-9][0-9]?|0)\s*$";
+                                                   @"\s*(?<subject>[\p{IsHiragana}\p{IsKatakana}\p{IsCJKUnifiedIdeographs}]+)\s*," +
+                                                   @"\s*(?<score>100|[1-9][0-9]?|0)\s*$";
 
         /// <summary>
         /// 合格点の基準値
         /// </summary>
         private const int C_PassingScore = 60;
-
-        /// 表示科目の教科リスト
-        /// </summary>
-        private static readonly string[] FTargetSubjects = { "数学", "国語", "理科", "英語", "社会" };
 
         /// <summary>
         /// CSVファイルを読み込み、成績リストに格納する
@@ -83,6 +84,7 @@ namespace ScoreManager {
             Console.WriteLine("{0, -3} | {1, -2} | {2, 2}", vStudent.Name, vStudent.Subject, vStudent.Score);
         }
 
+        /// <summary>
         /// 全教科の平均点を計算する
         /// </summary>
         /// <returns>平均点（データがない場合は0）</returns>

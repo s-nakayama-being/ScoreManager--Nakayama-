@@ -1,6 +1,4 @@
-﻿using System.IO;
-
-namespace ScoreManager {
+﻿namespace ScoreManager {
     public class Program {
 
         /// <summary>
@@ -11,7 +9,7 @@ namespace ScoreManager {
         /// <summary>
         /// 成績データを出力するCSVファイルのパス
         /// </summary>
-        private static readonly string FOutputCsvFilePath = Path.Combine("..", "..", "output_scores.csv");
+        private const string C_OutputCsvFilePath = "../../output_scores.csv";
 
         static void Main(string[] args) {
             var wManager = new ScoreManager();
