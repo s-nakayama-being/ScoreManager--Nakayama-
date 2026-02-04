@@ -18,7 +18,7 @@ namespace ScoreManager {
         /// <summary>
         /// 表示科目の教科リスト
         /// </summary>
-        private static readonly string[] FTargetSubjects = { "数学", "国語", "理科", "英語", "社会" };
+        private static readonly string[] C_TargetSubjects = { "数学", "国語", "理科", "英語", "社会" };
 
         /// <summary>
         /// 正規表現パターン：名前、科目、点数
@@ -120,7 +120,7 @@ namespace ScoreManager {
 
             Console.WriteLine("科目別平均点:");
 
-            foreach (string wSubject in FTargetSubjects) {
+            foreach (string wSubject in C_TargetSubjects) {
                 if (wSubjectAverage.TryGetValue(wSubject, out double wAverage)) {
                     Console.WriteLine("{0}: {1:F2}", wSubject, wAverage);
                 } else {
