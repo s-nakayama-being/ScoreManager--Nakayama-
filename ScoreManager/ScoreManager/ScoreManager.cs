@@ -187,7 +187,7 @@ namespace ScoreManager {
         public void ExportScoresToCsv(string vOutputCsvFilePath) {
             try {
                 using (var wWriter = new StreamWriter(vOutputCsvFilePath, false, Encoding.UTF8)) {
-                    wWriter.WriteLine("name,Subject,Score");
+                    wWriter.WriteLine("Name,Subject,Score");
 
                     foreach (var wStudent in this.FStudentScores) {
                         wWriter.WriteLine($"{wStudent.Name},{wStudent.Subject},{wStudent.Score}");
