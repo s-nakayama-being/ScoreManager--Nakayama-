@@ -149,6 +149,38 @@ namespace ScoreManager {
         }
 
         /// <summary>
+        /// 科目ごとに成績データを抽出する
+        /// </summary>
+        /// <param name="vSubject">入力された科目名</param> 
+        private List<StudentScore> GetScoresPerSubject(string vSubject) {
+            return this.FStudentScores.Where(x => x.Subject.Equals(vSubject, StringComparison.OrdinalIgnoreCase)).ToList();
+        }
+
+        /// <summary>
+        /// ユーザーに指定された科目の成績データを表示する
+        /// </summary>
+        /// <param name="vSubject">入力された科目名</param>
+        public void DisplayScoresPerSubject(string vSubject) {
+            if (string.IsNullOrWhiteSpace(vSubject)) {
+                Console.WriteLine("エラー：科目名が指定されていません。");
+                return;
+            }
+
+            Console.WriteLine($"{vSubject} の成績一覧");
+
+            var wFilteredStudentsBySubject = this.GetScoresPerSubject(vSubject);
+
+            if (!wFilteredStudentsBySubject.Any()) {
+                Console.WriteLine($"エラー：{vSubject} の成績データが見つかりません。");
+                return;
+            }
+
+            foreach (var wStudent in wFilteredStudentsBySubject) {
+                this.PrintStudent(wStudent);
+            }
+        }
+
+        /// <summary>
         /// 成績リストに格納している全データをCSV形式で出力する
         /// </summary> 
         /// <param name="vOutputCsvFilePath">出力先CSVファイルのパス</param>

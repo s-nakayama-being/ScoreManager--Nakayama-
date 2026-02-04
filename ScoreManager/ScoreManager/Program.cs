@@ -1,4 +1,6 @@
-﻿namespace ScoreManager {
+﻿using System;
+
+namespace ScoreManager {
     public class Program {
 
         /// <summary>
@@ -24,7 +26,11 @@
 
             wManager.DisplayPassingStudents();
 
-            wManager.ExportScoresToCsv(FOutputCsvFilePath);
+            Console.Write("科目名を入力：");
+            var wInputSubject = Console.ReadLine();
+            wManager.DisplayScoresPerSubject(wInputSubject);
+
+            wManager.ExportScoresToCsv(C_OutputCsvFilePath);
         }
     }
 }
