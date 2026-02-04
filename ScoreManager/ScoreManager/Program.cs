@@ -6,12 +6,17 @@ namespace ScoreManager {
         /// <summary>
         /// 処理対象となるCSVファイルのパス
         /// </summary>
-        private const string C_FilePath = "../../scores.csv";
+        private const string C_InputCsvFilePath = "../../scores.csv";
+
+        /// <summary>
+        /// 成績データを出力するCSVファイルのパス
+        /// </summary>
+        private const string C_OutputCsvFilePath = "../../output_scores.csv";
 
         static void Main(string[] args) {
             var wManager = new ScoreManager();
 
-            wManager.LoadCsv(C_FilePath);
+            wManager.LoadCsv(C_InputCsvFilePath);
 
             wManager.DisplayScores();
 
@@ -24,6 +29,8 @@ namespace ScoreManager {
             Console.Write("科目名を入力：");
             var wInputSubject = Console.ReadLine();
             wManager.DisplayScoresPerSubject(wInputSubject);
+
+            wManager.ExportScoresToCsv(C_OutputCsvFilePath);
         }
     }
 }
