@@ -1,4 +1,6 @@
-﻿namespace ScoreManager {
+﻿using System;
+
+namespace ScoreManager {
     public class Program {
 
         /// <summary>
@@ -18,6 +20,10 @@
             wManager.DisplayEachSubjectAverage();
 
             wManager.DisplayPassingStudents();
+
+            Console.Write("科目名を入力：");
+            var wInputSubject = Console.ReadLine();
+            wManager.DisplayScoresPerSubject(wInputSubject);
         }
     }
 }
