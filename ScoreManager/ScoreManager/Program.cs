@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Text;
 
 namespace ScoreManager {
@@ -7,83 +8,85 @@ namespace ScoreManager {
         /// <summary>
         /// 処理対象となるCSVファイルのパス
         /// </summary>
-        private const string C_InputCsvFilePath = "../../scores.csv";
+        private static readonly string C_InputCsvFilePath = "../../scores.csv";
 
         /// <summary>
         /// 成績データを出力するCSVファイルのパス
         /// </summary>
-        private const string C_OutputCsvFilePath = "../../output_scores.csv";
+        private static readonly string C_OutputCsvFilePath = "../../output_scores.csv";
+
+        /// <summary>
+        /// メニュー項目をh定義する内部クラス
+        /// </summary>
+        private class MenuItem {
+            /// <summary>
+            /// メニューId
+            /// </summary>
+            public int Id { get; set; }
+
+            /// <summary>
+            /// メニュー説明文
+            /// </summary>
+            public string Description { get; set; }
+
+            /// <summary>
+            /// メニュー選択時のアクション
+            /// </summary>
+            public Action Action { get; set; }
+        }
 
         static void Main(string[] args) {
             var wManager = new ScoreManager();
 
+            var wMenuItems = new MenuItem[] {
+                new MenuItem { Id = 1, Description = "一覧表示",         Action = wManager.DisplayScoreRecords },
+                new MenuItem { Id = 2, Description = "平均点表示",       Action = wManager.DisplayAllSubjectsAverage },
+                new MenuItem { Id = 3, Description = "科目別平均点表示", Action = wManager.DisplayEachSubjectAverage },
+                new MenuItem { Id = 4, Description = "合格者一覧",       Action = wManager.DisplayPassingRecords },
+                new MenuItem { Id = 5, Description = "科目でフィルタ",   Action = () => {
+                    Console.Write("科目名を入力：");
+                    var wInputSubject = Console.ReadLine();
+                    wManager.DisplayScoreRecordsPerSubject(wInputSubject);
+                }},
+                new MenuItem { Id = 6, Description = "CSV出力", Action = () => wManager.ExportScoreRecordsToCsv(C_OutputCsvFilePath) },
+                new MenuItem { Id = 0, Description = "終了", Action = () => {
+                    Console.WriteLine("アプリケーションを終了します。");
+                    Console.WriteLine("何かキーを押すと終了します。");
+                    Console.ReadKey();
+                }}
+            };
+
             Console.WriteLine("=== 成績管理アプリ ===");
             Console.WriteLine(".exeと同階層にあるCSVファイルから成績データを読み込みます。");
+
             wManager.LoadCsv(C_InputCsvFilePath);
 
             while (true) {
-                PrintMenu();
-
-                var wInput = Console.ReadLine();
-
-                var wNormalizedInput = wInput.Normalize(NormalizationForm.FormKC);
-
-                if (Enum.TryParse(wNormalizedInput, true, out ScoreManager.MenuActions wSelectedAction) && Enum.IsDefined(typeof(ScoreManager.MenuActions), wSelectedAction)) {
-                    switch (wSelectedAction) {
-                        case ScoreManager.MenuActions.DisplayScores:
-                            wManager.DisplayScores();
-                            break;
-
-                        case ScoreManager.MenuActions.DisplayAllSubjectsAverage:
-                            wManager.DisplayAllSubjectsAverage();
-                            break;
-
-                        case ScoreManager.MenuActions.DisplayEachSubjectAverage:
-                            wManager.DisplayEachSubjectAverage();
-                            break;
-
-                        case ScoreManager.MenuActions.DisplayPassingStudents:
-                            wManager.DisplayPassingStudents();
-                            break;
-
-                        case ScoreManager.MenuActions.DisplayScoresPerSubject:
-                            Console.Write("科目名を入力：");
-                            var wInputSubject = Console.ReadLine();
-                            wManager.DisplayScoresPerSubject(wInputSubject);
-                            break;
-
-                        case ScoreManager.MenuActions.ExportScoresToCsv:
-                            wManager.ExportScoresToCsv(C_OutputCsvFilePath);
-                            break;
-
-                        case ScoreManager.MenuActions.Exit:
-                            Console.WriteLine("アプリケーションを終了します。");
-                            return;
-
-                        default:
-                            Console.WriteLine("無効な入力です。");
-                            break;
-                    }
-                } else {
-                    Console.WriteLine("無効な入力です。");
+                Console.WriteLine("=== 成績管理メニュー ===");
+                foreach (var wItem in wMenuItems) {
+                    Console.WriteLine($"{wItem.Id}. {wItem.Description}");
                 }
-            }
-        }
 
-        /// <summary>
-        /// メニュー項目をコンソールに表示する
-        /// </summary>
-        private static void PrintMenu() {
-            Console.WriteLine();
-            Console.WriteLine("=== 成績管理メニュー ===");
-            Console.WriteLine($"{(int)ScoreManager.MenuActions.DisplayScores}. 一覧表示");
-            Console.WriteLine($"{(int)ScoreManager.MenuActions.DisplayAllSubjectsAverage}. 平均点表示");
-            Console.WriteLine($"{(int)ScoreManager.MenuActions.DisplayEachSubjectAverage}. 科目別平均点表示");
-            Console.WriteLine($"{(int)ScoreManager.MenuActions.DisplayPassingStudents}. 合格者一覧");
-            Console.WriteLine($"{(int)ScoreManager.MenuActions.DisplayScoresPerSubject}. 科目でフィルタ");
-            Console.WriteLine($"{(int)ScoreManager.MenuActions.ExportScoresToCsv}. CSV出力");
-            Console.WriteLine($"{(int)ScoreManager.MenuActions.Exit}. 終了");
-            Console.Write("選択：");
+                Console.Write("選択：");
+
+                var wRawInput = Console.ReadLine();
+
+                var wNormalizedInput = wRawInput.Normalize(NormalizationForm.FormKC);
+
+                if (!int.TryParse(wNormalizedInput, out int wSelectedId)) {
+                    Console.WriteLine("無効な入力です。");
+                    continue;
+                }
+
+                var wTargetMenu = wMenuItems.SingleOrDefault(x => x.Id == wSelectedId);
+
+                if (wTargetMenu == null) {
+                    Console.WriteLine("無効な入力です。");
+                    continue;
+                }
+
+                wTargetMenu.Action.Invoke();
+            }
         }
     }
 }
