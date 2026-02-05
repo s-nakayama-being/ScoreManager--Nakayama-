@@ -33,6 +33,19 @@ namespace ScoreManager {
         private const int C_PassingScore = 60;
 
         /// <summary>
+        /// メニューの操作項目を定義する列挙型
+        /// </summary>
+        public enum MenuActions {
+            Exit = 0,
+            DisplayScores = 1,
+            DisplayAllSubjectsAverage = 2,
+            DisplayEachSubjectAverage = 3,
+            DisplayPassingStudents = 4,
+            DisplayScoresPerSubject = 5,
+            ExportScoresToCsv = 6
+        }
+
+        /// <summary>
         /// CSVファイルを読み込み、成績リストに格納する
         /// </summary>
         /// <param name="vInputCsvFilePath">CSVファイルのパス</param>
