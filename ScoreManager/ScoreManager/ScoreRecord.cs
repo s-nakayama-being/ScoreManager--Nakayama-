@@ -2,7 +2,7 @@
     /// <summary>
     /// 生徒の名前、科目、点数のデータを保持するクラス
     /// </summary>
-    public class StudentScore {
+    public class ScoreRecord {
         /// <summary>
         /// 名前
         /// </summary>
@@ -24,7 +24,7 @@
         /// <param name="vName">名前</param>
         /// <param name="vSubject">科目</param>
         /// <param name="vScore">点数</param>
-        public StudentScore(string vName, string vSubject, int vScore) {
+        public ScoreRecord(string vName, string vSubject, int vScore) {
             this.Name = vName;
             this.Subject = vSubject;
             this.Score = vScore;

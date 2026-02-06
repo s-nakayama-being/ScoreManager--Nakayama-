@@ -15,45 +15,26 @@ namespace ScoreManager {
         /// </summary>
         private static readonly string C_OutputCsvFilePath = "../../output_scores.csv";
 
-        /// <summary>
-        /// メニュー項目をh定義する内部クラス
-        /// </summary>
-        private class MenuItem {
-            /// <summary>
-            /// メニューId
-            /// </summary>
-            public int Id { get; set; }
-
-            /// <summary>
-            /// メニュー説明文
-            /// </summary>
-            public string Description { get; set; }
-
-            /// <summary>
-            /// メニュー選択時のアクション
-            /// </summary>
-            public Action Action { get; set; }
-        }
-
         static void Main(string[] args) {
             var wManager = new ScoreManager();
 
             var wMenuItems = new MenuItem[] {
-                new MenuItem { Id = 1, Description = "一覧表示",         Action = wManager.DisplayScoreRecords },
-                new MenuItem { Id = 2, Description = "平均点表示",       Action = wManager.DisplayAllSubjectsAverage },
-                new MenuItem { Id = 3, Description = "科目別平均点表示", Action = wManager.DisplayEachSubjectAverage },
-                new MenuItem { Id = 4, Description = "合格者一覧",       Action = wManager.DisplayPassingRecords },
-                new MenuItem { Id = 5, Description = "科目でフィルタ",   Action = () => {
+                new MenuItem(1, "一覧表示",         wManager.DisplayScoreRecords),
+                new MenuItem(2, "平均点表示",       wManager.DisplayAllSubjectsAverage),
+                new MenuItem(3, "科目別平均点表示", wManager.DisplayEachSubjectAverage),
+                new MenuItem(4, "合格者一覧",       wManager.DisplayPassingRecords),
+                new MenuItem(5, "科目でフィルタ",   () => {
                     Console.Write("科目名を入力：");
                     var wInputSubject = Console.ReadLine();
                     wManager.DisplayScoreRecordsPerSubject(wInputSubject);
-                }},
-                new MenuItem { Id = 6, Description = "CSV出力", Action = () => wManager.ExportScoreRecordsToCsv(C_OutputCsvFilePath) },
-                new MenuItem { Id = 0, Description = "終了", Action = () => {
+                }),
+                new MenuItem(6, "CSV出力",          () => wManager.ExportScoreRecordsToCsv(C_OutputCsvFilePath)),
+                new MenuItem(0, "終了",             () => {
                     Console.WriteLine("アプリケーションを終了します。");
                     Console.WriteLine("何かキーを押すと終了します。");
                     Console.ReadKey();
-                }}
+                    Environment.Exit(0);
+                })
             };
 
             Console.WriteLine("=== 成績管理アプリ ===");
@@ -70,6 +51,11 @@ namespace ScoreManager {
                 Console.Write("選択：");
 
                 var wRawInput = Console.ReadLine();
+
+                if (string.IsNullOrWhiteSpace(wRawInput)) {
+                    Console.WriteLine("無効な入力です。");
+                    continue;
+                }
 
                 var wNormalizedInput = wRawInput.Normalize(NormalizationForm.FormKC);
 

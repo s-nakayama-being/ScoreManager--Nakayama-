@@ -13,7 +13,7 @@ namespace ScoreManager {
         /// <summary>
         /// 成績データを保持するリスト
         /// </summary>
-        private readonly List<StudentScore> FScoreRecords = new List<StudentScore>();
+        private readonly List<ScoreRecord> FScoreRecords = new List<ScoreRecord>();
 
         /// <summary>
         /// 表示科目の教科リスト
@@ -56,7 +56,7 @@ namespace ScoreManager {
                 string wSubject = wMatch.Groups["subject"].Value;
                 int wScore = int.Parse(wMatch.Groups["score"].Value);
 
-                this.FScoreRecords.Add(new StudentScore(wName, wSubject, wScore));
+                this.FScoreRecords.Add(new ScoreRecord(wName, wSubject, wScore));
             }
 
             Console.WriteLine($"{this.FScoreRecords.Count} 件のデータを読み込みました。");
@@ -77,7 +77,7 @@ namespace ScoreManager {
         /// 成績レコードをフォーマットして出力するヘルパーメソッド
         /// </summary>
         /// <param name="vScoreRecord">成績データ</param>
-        private void PrintScoreRecord(StudentScore vScoreRecord) {
+        private void PrintScoreRecord(ScoreRecord vScoreRecord) {
             Console.WriteLine("{0, -3} | {1, -2} | {2, 2}", vScoreRecord.Name, vScoreRecord.Subject, vScoreRecord.Score);
         }
 
@@ -118,7 +118,7 @@ namespace ScoreManager {
         /// 合格した成績レコードを抽出する
         /// </summary>
         /// <returns>合格点以上の成績リスト</returns>
-        private List<StudentScore> GetPassingRecords() => this.FScoreRecords.Where(x => x.Score >= C_PassingScore).ToList();
+        private List<ScoreRecord> GetPassingRecords() => this.FScoreRecords.Where(x => x.Score >= C_PassingScore).ToList();
 
         /// <summary>
         /// 合格した成績レコードを表示する
@@ -126,8 +126,8 @@ namespace ScoreManager {
         public void DisplayPassingRecords() {
             var wPassingStudents = this.GetPassingRecords();
             Console.WriteLine($"合格者 {wPassingStudents.Count} 名");
-            foreach (var wStudent in wPassingStudents) {
-                this.PrintScoreRecord(wStudent);
+            foreach (var wScoreRecord in wPassingStudents) {
+                this.PrintScoreRecord(wScoreRecord);
             }
         }
 
@@ -135,7 +135,7 @@ namespace ScoreManager {
         /// ユーザーに指定された科目の成績レコードを抽出する
         /// </summary>
         /// <param name="vSubject">入力された科目名</param> 
-        private List<StudentScore> GetScoreRecordsPerSubject(string vSubject) {
+        private List<ScoreRecord> GetScoreRecordsPerSubject(string vSubject) {
             return this.FScoreRecords.Where(x => x.Subject.Equals(vSubject, StringComparison.OrdinalIgnoreCase)).ToList();
         }
 
@@ -158,8 +158,8 @@ namespace ScoreManager {
                 return;
             }
 
-            foreach (var wStudent in wFilteredStudentsBySubject) {
-                this.PrintScoreRecord(wStudent);
+            foreach (var wScoreRecord in wFilteredStudentsBySubject) {
+                this.PrintScoreRecord(wScoreRecord);
             }
         }
 
@@ -172,8 +172,8 @@ namespace ScoreManager {
                 using (var wWriter = new StreamWriter(vOutputCsvFilePath, false, Encoding.UTF8)) {
                     wWriter.WriteLine("Name,Subject,Score");
 
-                    foreach (var wStudent in this.FScoreRecords) {
-                        wWriter.WriteLine($"{wStudent.Name},{wStudent.Subject},{wStudent.Score}");
+                    foreach (var wScoreRecord in this.FScoreRecords) {
+                        wWriter.WriteLine($"{wScoreRecord.Name},{wScoreRecord.Subject},{wScoreRecord.Score}");
                     }
                 }
 
